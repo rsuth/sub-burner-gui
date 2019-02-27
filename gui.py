@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter.filedialog import askopenfilename
-
-encode_job = {}
+from srt_burner import EncodeJob
+from os.path import splitext
 
 class MainAppWindow(tk.Frame):
     def __init__(self, master=None):
@@ -51,7 +51,9 @@ class MainAppWindow(tk.Frame):
             self.vid_path.set(vid_path)
 
     def start_encode(self):
-        print(f"SRT: {self.sub_path.get()}\nVid: {self.vid_path.get()}")
+        job = EncodeJob(vid_path=self.vid_path.get(), sub_path=self.sub_path.get(), 
+            out_path=f"{self.vid_path.get().splitext()[0]}_subbed.mp4")
+        job.start()
 
 root = tk.Tk()
 root.title("srt-burner")
