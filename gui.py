@@ -7,6 +7,7 @@ class MainAppWindow(tk.Frame):
     def __init__(self, master=None):
         self.sub_path = tk.StringVar()
         self.vid_path = tk.StringVar()
+        self.status = tk.StringVar()
         
         tk.Frame.__init__(self, master)
         self.pack()
@@ -33,8 +34,14 @@ class MainAppWindow(tk.Frame):
         self.btn_pick_vid.grid(column=2, row="0")
         self.btn_pick_srt.grid(column=2, row="1")
         
+        # status
+        self.lbl_status = tk.Label(self, textvariable=self.status)
+        self.lbl_status.grid(sticky="E", column=0, row=2)
+        
+        # Start
         self.btn_start = tk.Button(self, text="Start", command=self.start_encode)
         self.btn_start.grid(sticky="E", column=1, row=2)
+        
         # Quit
         self.QUIT = tk.Button(self, text="Quit", command=root.destroy)
         self.QUIT.grid(sticky="E", column=2, row=2)
@@ -52,8 +59,11 @@ class MainAppWindow(tk.Frame):
 
     def start_encode(self):
         job = EncodeJob(vid_path=self.vid_path.get(), sub_path=self.sub_path.get(), 
-            out_path=f"{self.vid_path.get().splitext()[0]}_subbed.mp4")
+            out_path=f"{splitext(self.vid_path.get())[0]}_subbed.mp4")
+        self.status.set("Encoding...")
         job.start()
+        while self.status.get() not in ["DONE", "FAILED"]:
+            self.status.set(job.status)
 
 root = tk.Tk()
 root.title("srt-burner")
