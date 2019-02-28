@@ -13,6 +13,7 @@ class EncodeJob:
         self.status = "STARTED"
         process = subprocess.run([
             'ffmpeg',
+            '-y',
             '-i',
             self.video_path,
             '-filter_complex',

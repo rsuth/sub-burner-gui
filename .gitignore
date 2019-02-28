@@ -1,3 +1,7 @@
 /testdata
 __pycache__
 *.pyc
+.venv
+*.spec
+/build
+/dist
