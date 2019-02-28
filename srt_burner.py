@@ -1,4 +1,5 @@
 import os
+import shutil
 import subprocess
 
 class EncodeJob:
@@ -11,8 +12,12 @@ class EncodeJob:
     # ffmpeg -i in.mp4 -filter_complex "subtitles=in.srt:force_style='OutlineColour=&H80000000,BorderStyle=3,Outline=1,Shadow=1,MarginV=20'" out.mp4
     def start(self):
         self.status = "STARTED"
+        if os.name == "nt":
+            ffmpeg_executable = shutil.which("ffmpeg")
+        else:
+            ffmpeg_executable = "ffmpeg"
         process = subprocess.run([
-            'ffmpeg',
+            ffmpeg_executable,
             '-y',
             '-i',
             self.video_path,
